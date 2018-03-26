@@ -6,11 +6,17 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 17:49:22 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/25 21:23:30 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/26 23:30:24 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
+
+/*
+** Set the job list head to NULL at the beginning.
+*/
+
+t_job			*g_first_job = NULL;
 
 /*
 ** Create a new job. Not intended to be used outside this scope.

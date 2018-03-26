@@ -6,11 +6,17 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 07:41:24 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/23 19:02:15 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/26 23:31:33 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
+
+/*
+** The definition of the global attributes is here.
+*/
+
+t_shell	g_shell;
 
 /*
 ** 1. Keep track of attributes of the shell.

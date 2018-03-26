@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:10:00 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/23 20:59:12 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/26 23:28:42 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,11 @@ extern char				**g_envp;
 /*
 ** The active jobs are linked into a list. This is its head.
 */
-t_job					*g_first_job = NULL;
+extern t_job			*g_first_job;
 
 /*
 ** The shell attributes are required everywhere.
 */
-t_shell					g_shell;
+extern t_shell			g_shell;
 
 #endif

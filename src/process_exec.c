@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:43:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/26 04:38:08 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/27 00:11:17 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ void			launch_job_processes(t_job *j, int fd[3], bool foreground)
 	t_process	*p;
 	int			pipefd[2];
 
-	fd[STDIN] = j->stdin;
 	p = j->first_process;
 	while (p)
 	{
@@ -137,8 +136,6 @@ void			launch_job_processes(t_job *j, int fd[3], bool foreground)
 				exit(EXIT_FAILURE);
 			fd[STDOUT] = pipefd[WRITE_END];
 		}
-		else
-			fd[STDOUT] = j->stdout;
 		launch_process(p, j, fd, foreground);
 		close_channel(fd[STDIN], j->stdin);
 		close_channel(fd[STDOUT], j->stdout);

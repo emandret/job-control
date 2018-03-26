@@ -6,14 +6,14 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:21:15 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/26 05:28:21 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/26 22:55:04 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef JOB_CONTROL_H
 # define JOB_CONTROL_H
 
-# include "inc/data_struct.h"
+# include "data_struct.h"
 
 /*
 ** Assert that mallocs are protected.
