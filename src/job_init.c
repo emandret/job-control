@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 17:49:22 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 15:07:26 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/28 20:57:41 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,11 @@ t_job			*add_job_to_list(int stdin, int stdout, int stderr)
 	t_job	*j;
 
 	if (!g_first_job)
-		return (g_first_job = init_job((int []){stdin, stdout, stderr}));
+		return (g_first_job = init_job((int[]){stdin, stdout, stderr}));
 	j = g_first_job;
 	while (j->next)
 		j = j->next;
-	return (j->next = init_job((int []){stdin, stdout, stderr}));
+	return (j->next = init_job((int[]){stdin, stdout, stderr}));
 }
 
 /*

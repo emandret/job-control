@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/26 22:48:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 23:56:33 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/28 01:56:31 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void		print_job(t_job *j)
 	i = 0;
 	while (p)
 	{
-		printf(" + process [%d] %s\n", i++, p->argv[0]);
+		printf(" + [%d] (process %jd) %s\n", i++, (intmax_t)p->pid, p->argv[0]);
 		printf("  - completed : %d\n", p->completed);
 		printf("  - stopped   : %d\n", p->stopped);
 		printf("  - status    : %d\n", p->status);
@@ -48,7 +48,7 @@ int				main(void)
 	add_process_to_job(j, "/bin/ls", (char *[]){"ls", "-l", NULL});
 	add_process_to_job(j, "/bin/cat", (char *[]){"cat", "-e", NULL});
 	launch_job(j, true);
-	// do_job_notification();
+	do_job_notification();
 	print_job(j);
 	return (0);
 }
