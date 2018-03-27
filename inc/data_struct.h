@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:10:00 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 14:45:07 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/27 21:57:12 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct			s_std
 ** A process is a single process:
 **
 ** @next                The next process in the list.
+** @xpath               The executable path.
 ** @argv                The arguments.
 ** @pid                 The process ID pid of the process.
 ** @completed           True if the process has completed.
@@ -54,6 +55,7 @@ typedef struct			s_std
 typedef struct			s_process
 {
 	struct s_process	*next;
+	char				*xpath;
 	char				**argv;
 	pid_t				pid;
 	bool				completed;

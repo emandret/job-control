@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 18:37:29 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 15:49:21 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/27 22:49:47 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,26 @@
 
 static void	format_job_info(t_job *j, const char *status)
 {
-	t_process	*p;
+	char			name[FORMAT_BUF];
+	t_process		*p;
+	unsigned int	i;
 
-	fprintf(stderr, "\n[%d] %jd (%s): ", j->id, (intmax_t)j->pgid, status);
+	bzero(name, FORMAT_BUF);
 	p = j->first_process;
 	while (p)
 	{
-		fprintf(stderr, "%s", p->argv[0]);
+		i = 0;
+		while (p->argv[i])
+		{
+			strlcat(name, p->argv[i], FORMAT_BUF);
+			if (p->argv[++i])
+				strlcat(name, " ", FORMAT_BUF);
+		}
 		if ((p = p->next))
-			fprintf(stderr, " | ");
+			strlcat(name, " | ", FORMAT_BUF);
 	}
-	fprintf(stderr, "\n");
+	fprintf(stderr, "[%d] %jd (%s): %s\n", j->id, (intmax_t)j->pgid,
+			status, name);
 }
 
 /*

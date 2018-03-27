@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:43:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 13:53:56 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/27 23:36:58 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static void		launch_process(t_process *p, t_job *j, bool foreground)
 		set_channel(p->std.in, STDIN_FILENO);
 		set_channel(p->std.out, STDOUT_FILENO);
 		set_channel(p->std.err, STDERR_FILENO);
-		execve(p->argv[0], p->argv, g_envp);
+		execve(p->xpath, p->argv, g_envp);
 		exit(EXIT_SUCCESS);
 	}
 	if (p->pid > 0 && g_shell.is_interactive)

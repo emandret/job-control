@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:21:15 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 18:01:53 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/27 22:46:13 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@
 ** Assert that mallocs are protected.
 */
 # define ASSERT_MALLOC(x) if (!(x)) return (NULL);
+
+/*
+** The format buffer size.
+*/
+# define FORMAT_BUF 1024
 
 /*
 ** shell.c
@@ -61,7 +66,7 @@ void			continue_job(t_job *j, bool foreground);
 /*
 ** process_init.c
 */
-t_process		*add_process_to_job(t_job *j, char **argv);
+t_process		*add_process_to_job(t_job *j, char *xpath, char **argv);
 
 /*
 ** process_status.c
