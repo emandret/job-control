@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 18:19:02 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/25 19:49:39 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/27 18:08:18 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 ** Find a job by its process group ID pid.
 **
-** @return  The found job.
+** @return The found job.
 */
 
 t_job	*find_job(pid_t pgid)
@@ -35,7 +35,7 @@ t_job	*find_job(pid_t pgid)
 /*
 ** Check if a job has stopped.
 **
-** @return  Boolean.
+** @return Boolean.
 */
 
 bool	job_is_stopped(t_job *j)
@@ -55,7 +55,7 @@ bool	job_is_stopped(t_job *j)
 /*
 ** Check if a job has completed.
 **
-** @return  Boolean.
+** @return Boolean.
 */
 
 bool	job_is_completed(t_job *j)

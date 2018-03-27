@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 18:37:29 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/25 19:42:15 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/27 15:49:21 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,17 @@
 
 static void	format_job_info(t_job *j, const char *status)
 {
-	fprintf(stderr, "%jd (%s): %s\n", (intmax_t)j->pgid, status, j->command);
+	t_process	*p;
+
+	fprintf(stderr, "\n[%d] %jd (%s): ", j->id, (intmax_t)j->pgid, status);
+	p = j->first_process;
+	while (p)
+	{
+		fprintf(stderr, "%s", p->argv[0]);
+		if ((p = p->next))
+			fprintf(stderr, " | ");
+	}
+	fprintf(stderr, "\n");
 }
 
 /*
@@ -48,7 +58,7 @@ static bool	notify_if_stopped(t_job *j)
 {
 	if (job_is_stopped(j) && !j->notified)
 	{
-		format_job_info(j, "completed");
+		format_job_info(j, "stopped");
 		j->notified = true;
 		return (true);
 	}

@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:10:00 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/26 23:28:42 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/27 14:45:07 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,33 @@
 # include <stdio.h>
 # include <errno.h>
 
-# define STDIN 0
-# define STDOUT 1
-# define STDERR 2
-
 # define READ_END 0
 # define WRITE_END 1
 
 /*
-** A process is a single process.
+** The three standard file descriptors.
+**
+** @in                  The stdin.
+** @out                 The stdout.
+** @err                 The stderr.
+*/
+typedef struct			s_std
+{
+	int					in;
+	int					out;
+	int					err;
+}						t_std;
+
+/*
+** A process is a single process:
+**
+** @next                The next process in the list.
+** @argv                The arguments.
+** @pid                 The process ID pid of the process.
+** @completed           True if the process has completed.
+** @stopped             True if the process is stopped.
+** @status              The status code returned by waitpid(2).
+** @std                 The three standard file descriptors.
 */
 typedef struct			s_process
 {
@@ -41,26 +59,38 @@ typedef struct			s_process
 	bool				completed;
 	bool				stopped;
 	int					status;
+	t_std				std;
 }						t_process;
 
 /*
-** A job is a pipeline of processes.
+** A job is a pipeline of processes:
+**
+** @next                The next job in the list.
+** @first_process       The head of the process list.
+** @id                  The identifier.
+** @pgid                The process group ID pgid of the job.
+** @notified            True if the user has been notified for the job.
+** @tmodes              The terminal attributes for a job.
+** @std                 The three standard file descriptors.
 */
 typedef struct			s_job
 {
 	struct s_job		*next;
-	char				*command;
 	t_process			*first_process;
+	unsigned int		id;
 	pid_t				pgid;
 	bool				notified;
 	struct termios		tmodes;
-	int					stdin;
-	int					stdout;
-	int					stderr;
+	t_std				std;
 }						t_job;
 
 /*
 ** Keep track of attributes of the shell.
+**
+** @pgid				The process group ID pgid for the shell.
+** @tmodes				Store the shell terminal attributes.
+** @terminal_fd			The file descriptors of the tty input.
+** @is_interactive		True if the shell reads from user input from a tty.
 */
 typedef struct			s_shell
 {

@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:43:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 00:11:17 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/27 13:53:56 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** process ID pid. If the process group ID pgid is zero, then the
 ** process group ID pgid is set to the process ID pid value.
 **
-** @return  The process group ID pgid or -1 in case of error.
+** @return  	The process group ID pgid or -1 in case of error.
 */
 
 static pid_t	set_process_pgid(pid_t pid, pid_t pgid)
@@ -76,8 +76,7 @@ static void		close_channel(int fildes, int fildes2)
 **         ID pgid.
 */
 
-static void		launch_process(t_process *p, t_job *j, int fd[3],
-								bool foreground)
+static void		launch_process(t_process *p, t_job *j, bool foreground)
 {
 	if (!(p->pid = fork()))
 	{
@@ -93,9 +92,9 @@ static void		launch_process(t_process *p, t_job *j, int fd[3],
 			signal(SIGTTOU, SIG_DFL);
 			signal(SIGCHLD, SIG_DFL);
 		}
-		set_channel(fd[STDIN], STDIN_FILENO);
-		set_channel(fd[STDOUT], STDOUT_FILENO);
-		set_channel(fd[STDERR], STDERR_FILENO);
+		set_channel(p->std.in, STDIN_FILENO);
+		set_channel(p->std.out, STDOUT_FILENO);
+		set_channel(p->std.err, STDERR_FILENO);
 		execve(p->argv[0], p->argv, g_envp);
 		exit(EXIT_SUCCESS);
 	}
@@ -122,24 +121,28 @@ static void		launch_process(t_process *p, t_job *j, int fd[3],
 **    value, it is not closed.
 */
 
-void			launch_job_processes(t_job *j, int fd[3], bool foreground)
+void			launch_job_processes(t_job *j, bool foreground)
 {
 	t_process	*p;
 	int			pipefd[2];
 
 	p = j->first_process;
+	p->std.in = j->std.in;
 	while (p)
 	{
 		if (p->next)
 		{
 			if (pipe(pipefd) == -1)
 				exit(EXIT_FAILURE);
-			fd[STDOUT] = pipefd[WRITE_END];
+			p->std.out = pipefd[WRITE_END];
 		}
-		launch_process(p, j, fd, foreground);
-		close_channel(fd[STDIN], j->stdin);
-		close_channel(fd[STDOUT], j->stdout);
-		fd[STDIN] = pipefd[READ_END];
-		p = p->next;
+		else
+			p->std.out = j->std.out;
+		p->std.err = j->std.err;
+		launch_process(p, j, foreground);
+		close_channel(p->std.in, j->std.in);
+		close_channel(p->std.out, j->std.out);
+		if ((p = p->next))
+			p->std.in = pipefd[READ_END];
 	}
 }

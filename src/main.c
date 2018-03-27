@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/26 22:48:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 00:12:48 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/27 18:10:33 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,16 @@ static char		**tabdup(char **tab)
 	return (new);
 }
 
-static t_job	*new_job(int fd[3])
+static t_job	*new_job(void)
 {
 	struct termios	tmodes;
 	t_job			*j;
-	char			*argv1[5] = {"/bin/ls", "-l", NULL};
+	// char			*argv1[5] = {"/bin/ls", "-l", NULL};
 	char			*argv2[5] = {"/bin/cat", "-e", NULL};
 
 	tcgetattr(g_shell.terminal_fd, &tmodes);
-	j = add_job_to_list("ls -l | cat -e", tmodes, fd);
-	add_process_to_job(j, tabdup(argv1));
+	j = add_job_to_list(STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO);
+	// add_process_to_job(j, tabdup(argv1));
 	add_process_to_job(j, tabdup(argv2));
 	return (j);
 }
@@ -62,13 +62,13 @@ static void		print_job(t_job *j)
 
 	printf("************ JOB ************\n");
 	printf("next job      = %p\n", j->next);
-	printf("command       = %s\n", j->command);
 	printf("first process = %p\n", j->first_process);
+	printf("job id        = %d\n", j->id);
 	printf("job pgid      = %d\n", j->pgid);
 	printf("notified      = %d\n", j->notified);
-	printf("stdin         = %d\n", j->stdin);
-	printf("stdout        = %d\n", j->stdout);
-	printf("stderr        = %d\n", j->stderr);
+	printf("stdin         = %d\n", j->std.in);
+	printf("stdout        = %d\n", j->std.out);
+	printf("stderr        = %d\n", j->std.err);
 	p = j->first_process;
 	i = 0;
 	while (p)
@@ -87,9 +87,10 @@ int				main(void)
 	t_job	*j;
 
 	init_shell();
-	j = new_job((int [3]){STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO});
+	j = new_job();
 	print_job(j);
 	launch_job(j, true);
+	do_job_notification();
 	print_job(j);
 	return (0);
 }
