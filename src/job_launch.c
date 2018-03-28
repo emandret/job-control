@@ -6,24 +6,23 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/26 04:39:04 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/28 22:43:53 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/28 23:52:38 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
 
 /*
-** 1. Setup file descriptors corresponding to the job.
+** 1. Launch the job J and its associated processes.
 **
-** 2. Launch the job J and its associated processes.
-**
-** 3. Put job J in foreground or background (by giving access to terminal
+** 2. Put job J in foreground or background (by giving access to terminal
 **    by process group ID pgid).
 */
 
 void	launch_job(t_job *j, bool foreground)
 {
 	launch_job_processes(j, foreground);
+	j->launched = true;
 	if (!g_shell.is_interactive)
 		wait_for_job(j);
 	else if (foreground)

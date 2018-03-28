@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:02:33 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/28 22:09:52 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/29 00:29:41 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,9 @@ static bool	mark_process_status(pid_t pid, int status)
 		}
 	}
 	else if (pid == 0 || (pid == -1 && errno == ECHILD))
-		return (false);
+	{
+		//
+	}
 	return (false);
 }
 

@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 17:49:22 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/28 20:57:41 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/28 23:52:09 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static t_job	*init_job(int fd[3])
 	j->first_process = NULL;
 	j->id = job_list_size();
 	j->pgid = 0;
+	j->launched = false;
 	j->notified = false;
 	j->std.in = fd[0];
 	j->std.out = fd[1];

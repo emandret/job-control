@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:10:00 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/28 21:34:33 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/28 23:24:55 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ typedef struct			s_job
 	t_process			*first_process;
 	unsigned int		id;
 	pid_t				pgid;
+	bool				launched;
 	bool				notified;
 	struct termios		tmodes;
 	t_std				std;

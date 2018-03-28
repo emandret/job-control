@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/26 22:48:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/28 21:02:04 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/28 23:19:34 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,17 @@ static void		print_job(t_job *j)
 int				main(void)
 {
 	t_job			*j;
+	t_job			*k;
 
 	init_shell();
 	j = add_job_to_list(STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO);
 	add_process_to_job(j, "/bin/ls", (char *[]){"ls", "-l", NULL});
 	add_process_to_job(j, "/bin/cat", (char *[]){"cat", "-e", NULL});
+	k = add_job_to_list(STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO);
+	add_process_to_job(k, "/bin/ls", (char *[]){"ls", "-R", "/", NULL});
 	launch_job(j, true);
-	do_job_notification();
+	launch_job(k, true);
 	print_job(j);
+	print_job(k);
 	return (0);
 }
