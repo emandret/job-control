@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 18:28:57 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 16:44:48 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/28 22:42:10 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,31 +51,14 @@ void	put_job_in_background(t_job *j, bool cont)
 ** Mark a stopped job J as being running again.
 */
 
-void	mark_job_as_running(t_job *j)
+void	mark_job_as_state(t_job *j, t_state st)
 {
 	t_process	*p;
 
 	p = j->first_process;
 	while (p)
 	{
-		p->stopped = false;
-		p = p->next;
-	}
-	j->notified = false;
-}
-
-/*
-** Mark a stopped job J as being stopped.
-*/
-
-void	mark_job_as_stopped(t_job *j)
-{
-	t_process	*p;
-
-	p = j->first_process;
-	while (p)
-	{
-		p->stopped = true;
+		set_process_state(p, st);
 		p = p->next;
 	}
 	j->notified = false;

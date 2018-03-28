@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/26 04:39:04 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 23:36:45 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/28 22:43:53 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	launch_job(t_job *j, bool foreground)
 
 void	continue_job(t_job *j, bool foreground)
 {
-	mark_job_as_running(j);
+	mark_job_as_state(j, ST_RUNNING);
 	if (foreground)
 		put_job_in_foreground(j, true);
 	else

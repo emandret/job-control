@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 18:37:29 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 22:49:47 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/28 22:45:08 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	format_job_info(t_job *j, const char *status)
 
 static bool	notify_if_completed(t_job *j)
 {
-	if (job_is_completed(j))
+	if (check_job_state(j, ST_COMPLETED))
 	{
 		format_job_info(j, "completed");
 		free_job(j);
@@ -65,7 +65,7 @@ static bool	notify_if_completed(t_job *j)
 
 static bool	notify_if_stopped(t_job *j)
 {
-	if (job_is_stopped(j) && !j->notified)
+	if (check_job_state(j, ST_STOPPED) && !j->notified)
 	{
 		format_job_info(j, "stopped");
 		j->notified = true;

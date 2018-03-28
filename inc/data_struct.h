@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:10:00 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 21:57:12 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/28 21:34:33 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,20 @@
 
 # define READ_END 0
 # define WRITE_END 1
+
+/*
+** The three main state for a job.
+**
+** @ST_RUNNING          The job is running.
+** @ST_STOPPED          The job is stopped.
+** @ST_COMPLETED        The job is completed.
+*/
+typedef enum			e_state
+{
+	ST_RUNNING,
+	ST_STOPPED,
+	ST_COMPLETED
+}						t_state;
 
 /*
 ** The three standard file descriptors.

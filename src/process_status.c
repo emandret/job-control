@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:02:33 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 22:51:16 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/28 22:09:52 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ static bool	set_status(t_process *p, pid_t pid, int status)
 	{
 		p->status = status;
 		if (WIFSTOPPED(status))
-			p->stopped = true;
+			set_process_state(p, ST_STOPPED);
 		else if (WIFEXITED(status))
-			p->completed = true;
+			set_process_state(p, ST_COMPLETED);
 		else if (WIFSIGNALED(status))
 		{
-			p->completed = true;
+			set_process_state(p, ST_COMPLETED);
 			fprintf(stderr, "%jd: Terminated by signal %d\n", (intmax_t)pid,
 					WTERMSIG(p->status));
 		}
@@ -119,8 +119,8 @@ void		wait_for_job(t_job *j)
 	{
 		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
 		if (!mark_process_status(pid, status) ||
-			job_is_completed(j) ||
-			job_is_stopped(j))
+			check_job_state(j, ST_COMPLETED) ||
+			check_job_state(j, ST_STOPPED))
 			break ;
 	}
 }
