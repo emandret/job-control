@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 18:37:29 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/28 22:45:08 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/29 04:55:35 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static bool	notify_if_completed(t_job *j)
 	if (check_job_state(j, ST_COMPLETED))
 	{
 		format_job_info(j, "completed");
-		free_job(j);
+		// free_job(j);
 		return (true);
 	}
 	return (false);

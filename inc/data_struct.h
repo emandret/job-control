@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:10:00 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/28 23:24:55 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/29 04:57:41 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@
 # define WRITE_END 1
 
 /*
-** The three main state for a job.
+** The three main state for a process.
 **
-** @ST_RUNNING          The job is running.
-** @ST_STOPPED          The job is stopped.
-** @ST_COMPLETED        The job is completed.
+** @ST_RUNNING          The process is running.
+** @ST_STOPPED          The process is stopped.
+** @ST_COMPLETED        The process is completed.
 */
 typedef enum			e_state
 {

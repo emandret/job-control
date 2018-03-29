@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:21:15 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/28 22:41:55 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/29 04:11:14 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,14 @@ void			free_job(t_job *j);
 ** job_util.c
 */
 t_job			*find_job(pid_t pgid);
-bool			check_process_state(t_process *p, t_state st);
-void			set_process_state(t_process *p, t_state st);
 bool			check_job_state(t_job *j, t_state st);
+void			mark_job_state(t_job *j, t_state st);
 
 /*
 ** job_schedule.c
 */
 void			put_job_in_foreground(t_job *j, bool cont);
 void			put_job_in_background(t_job *j, bool cont);
-void			mark_job_as_state(t_job *j, t_state st);
 
 /*
 ** job_notify.c
@@ -62,6 +60,12 @@ void			do_job_notification(void);
 */
 void			launch_job(t_job *j, bool foreground);
 void			continue_job(t_job *j, bool foreground);
+
+/*
+** process_util.c
+*/
+bool			check_process_state(t_process *p, t_state st);
+void			mark_process_state(t_process *p, t_state st);
 
 /*
 ** process_init.c

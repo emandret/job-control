@@ -6,68 +6,63 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:02:33 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/29 00:29:41 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/29 04:56:08 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
 
 /*
-** Set the status.
+** Set the status by process ID pid.
 **
-** @return  Boolean.
+** @return  Int 0 or 1.
 */
 
-static bool	set_status(t_process *p, pid_t pid, int status)
+static bool	mark_state_by_pid(pid_t pid, int status)
 {
-	if (p->pid == pid)
+	t_job		*j;
+	t_process	*p;
+
+	j = g_first_job;
+	while (j)
 	{
-		p->status = status;
-		if (WIFSTOPPED(status))
-			set_process_state(p, ST_STOPPED);
-		else if (WIFEXITED(status))
-			set_process_state(p, ST_COMPLETED);
-		else if (WIFSIGNALED(status))
+		p = j->first_process;
+		while (p)
 		{
-			set_process_state(p, ST_COMPLETED);
-			fprintf(stderr, "%jd: Terminated by signal %d\n", (intmax_t)pid,
-					WTERMSIG(p->status));
+			if (p->pid == pid)
+			{
+				if (WIFSIGNALED(status))
+					mark_process_state(p, ST_COMPLETED);
+				else if (WIFSTOPPED(status))
+					mark_process_state(p, ST_STOPPED);
+				return (true);
+			}
+			p = p->next;
 		}
-		return (true);
+		j = j->next;
 	}
 	return (false);
 }
 
 /*
-** Loop through all the processes of all jobs to mark the status of
-** the process running under the process ID pid.
 **
-** @return  Boolean.
 */
 
 static bool	mark_process_status(pid_t pid, int status)
 {
-	t_process	*p;
-	t_job		*j;
+	t_job	*j;
 
 	if (pid > 0)
+		return (mark_state_by_pid(pid, status));
+	else if (pid == 0 || (pid == -1 && errno == ECHILD))
 	{
 		j = g_first_job;
 		while (j)
 		{
-			p = j->first_process;
-			while (p)
-			{
-				if (set_status(p, pid, status))
-					return (true);
-				p = p->next;
-			}
+			if (j->launched && check_job_state(j, ST_RUNNING))
+				mark_job_state(j, ST_COMPLETED);
 			j = j->next;
 		}
-	}
-	else if (pid == 0 || (pid == -1 && errno == ECHILD))
-	{
-		//
 	}
 	return (false);
 }
@@ -121,8 +116,7 @@ void		wait_for_job(t_job *j)
 	{
 		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
 		if (!mark_process_status(pid, status) ||
-			check_job_state(j, ST_COMPLETED) ||
-			check_job_state(j, ST_STOPPED))
+			!check_job_state(j, ST_RUNNING))
 			break ;
 	}
 }
