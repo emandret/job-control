@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:43:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 23:36:58 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/30 05:26:06 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ static void		launch_process(t_process *p, t_job *j, bool foreground)
 		execve(p->xpath, p->argv, g_envp);
 		exit(EXIT_SUCCESS);
 	}
-	if (p->pid > 0 && g_shell.is_interactive)
+	else if (p->pid > 0 && g_shell.is_interactive)
 		j->pgid = set_process_pgid(p->pid, j->pgid);
 	if (p->pid == -1 || j->pgid == -1)
 		exit(EXIT_FAILURE);
