@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:21:15 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/29 04:11:14 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/31 02:48:31 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,6 @@
 # define ASSERT_MALLOC(x) if (!(x)) return (NULL);
 
 /*
-** The format buffer size.
-*/
-# define FORMAT_BUF 1024
-
-/*
 ** shell.c
 */
 void			init_shell(void);
@@ -33,14 +28,16 @@ void			init_shell(void);
 /*
 ** job_init.c
 */
-unsigned int	job_list_size(void);
-t_job			*add_job_to_list(int stdin, int stdout, int stderr);
+unsigned int	get_job_list_size(void);
+t_job			*create_job(const char *name, int stdin, int stdout,
+							int stderr);
 void			free_job(t_job *j);
 
 /*
 ** job_util.c
 */
-t_job			*find_job(pid_t pgid);
+t_job			*find_job_by_pgid(pid_t pgid);
+t_job			*find_job_by_id(unsigned int id);
 bool			check_job_state(t_job *j, t_state st);
 void			mark_job_state(t_job *j, t_state st);
 
@@ -53,6 +50,7 @@ void			put_job_in_background(t_job *j, bool cont);
 /*
 ** job_notify.c
 */
+void			format_job_info(t_job *j, const char *status);
 void			do_job_notification(void);
 
 /*
@@ -70,7 +68,7 @@ void			mark_process_state(t_process *p, t_state st);
 /*
 ** process_init.c
 */
-t_process		*add_process_to_job(t_job *j, char *xpath, char **argv);
+t_process		*add_process(t_job *j, const char *xpath, char *const *argv);
 
 /*
 ** process_status.c

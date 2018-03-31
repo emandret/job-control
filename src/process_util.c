@@ -6,15 +6,15 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/29 04:07:01 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/29 04:51:58 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/31 06:14:35 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
 
 /*
-** Check the state of process P, between ST_RUNNING, ST_STOPPED
-** and ST_COMPLETED.
+** Check the state of process P, between ST_RUNNING, ST_STOPPED and
+** ST_COMPLETED.
 **
 ** @return Boolean.
 */

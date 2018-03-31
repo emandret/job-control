@@ -6,51 +6,51 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:40:19 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 22:13:44 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/31 02:53:19 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
 
 /*
-** Duplicate the argv array.
+** Duplicate and allocate the argv array.
 **
-** @return          The duplicated array.
+** @return The duplicated array.
 */
 
-static char			**tabdup(char **t)
+static char *const	*init_argv(char *const *argv)
 {
 	unsigned int	i;
-	char			**nt;
+	char			**t;
 
 	i = 1;
-	while (t[i++])
+	while (argv[i++])
 		;
-	ASSERT_MALLOC(nt = malloc(sizeof(char*) * i));
+	ASSERT_MALLOC(t = malloc(sizeof(char*) * i));
 	i = 0;
-	while (t[i])
+	while (argv[i])
 	{
-		nt[i] = strdup(t[i]);
+		t[i] = strdup(argv[i]);
 		i++;
 	}
-	nt[i] = NULL;
-	return (nt);
+	t[i] = NULL;
+	return (t);
 }
 
 /*
 ** Create a new process. Not intended to be used outside this scope.
 **
-** @return          The created process.
+** @return The created process.
 */
 
-static t_process	*init_process(char *xpath, char **argv)
+static t_process	*init_process(const char *xpath, char *const *argv)
 {
 	t_process	*p;
 
 	ASSERT_MALLOC(p = malloc(sizeof(t_process)));
 	p->next = NULL;
 	p->xpath = strdup(xpath);
-	p->argv = tabdup(argv);
+	p->argv = init_argv(argv);
 	p->pid = 0;
 	p->completed = false;
 	p->stopped = false;
@@ -61,10 +61,10 @@ static t_process	*init_process(char *xpath, char **argv)
 /*
 ** This function add a new process to the specified job.
 **
-** @return          The added process.
+** @return The added process.
 */
 
-t_process			*add_process_to_job(t_job *j, char *xpath, char **argv)
+t_process			*add_process(t_job *j, const char *xpath, char *const *argv)
 {
 	t_process	*p;
 

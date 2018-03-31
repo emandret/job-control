@@ -6,13 +6,13 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/26 22:48:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/29 04:55:15 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/31 05:59:42 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
 
-char			**g_envp = NULL;
+char *const		*g_envp = NULL;
 
 static void		print_job(t_job *j)
 {
@@ -42,18 +42,12 @@ static void		print_job(t_job *j)
 int				main(void)
 {
 	t_job			*j;
-	t_job			*k;
 
 	init_shell();
-	j = add_job_to_list(STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO);
-	add_process_to_job(j, "/bin/ls", (char *[]){"ls", "-l", NULL});
-	add_process_to_job(j, "/bin/cat", (char *[]){"cat", "-e", NULL});
-	k = add_job_to_list(STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO);
-	add_process_to_job(k, "/bin/ls", (char *[]){"ls", "-R", ".", NULL});
+	j = create_job("cat -e", 0, 1, 2);
+	add_process(j, "/bin/cat", (char *const []){"cat", "-e", NULL});
 	launch_job(j, true);
-	launch_job(k, true);
 	do_job_notification();
 	print_job(j);
-	print_job(k);
 	return (0);
 }

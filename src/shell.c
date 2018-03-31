@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 07:41:24 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/27 23:36:38 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/31 06:14:56 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ t_shell	g_shell;
 /*
 ** 1. Keep track of attributes of the shell.
 **
-** 2. Check if the shell is running interactively as the foreground job
-**    and loop until we are in the foreground.
+** 2. Check if the shell is running interactively as the foreground job and loop
+**    until we are in the foreground.
 **
-** 3. Ignore interactive and job-control signals and put ourselves in
-**    our own process group then grab control of the terminal.
+** 3. Ignore interactive and job-control signals and put ourselves in our own
+**    process group then grab control of the terminal.
 **
 ** 4. Save the default attributes for the shell.
 */

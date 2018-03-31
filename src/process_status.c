@@ -6,19 +6,30 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:02:33 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/29 04:56:08 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/31 06:14:06 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
 
 /*
-** Set the status by process ID pid.
-**
-** @return  Int 0 or 1.
+** Print formatted info about processes terminated by a signal.
 */
 
-static bool	mark_state_by_pid(pid_t pid, int status)
+static void	format_termsig_info(t_process *p, int status)
+{
+	fprintf(stderr, "PID %jd (terminated by signal %d): %s\n", (intmax_t)p->pid,
+			WTERMSIG(status), p->xpath);
+}
+
+/*
+** Set the state of each process by process ID pid. Handle notifying for
+** processes terminated by signals.
+**
+** @return Boolean.
+*/
+
+static bool	mark_process_state_by_pid(pid_t pid, int status)
 {
 	t_job		*j;
 	t_process	*p;
@@ -32,7 +43,10 @@ static bool	mark_state_by_pid(pid_t pid, int status)
 			if (p->pid == pid)
 			{
 				if (WIFSIGNALED(status))
+				{
+					format_termsig_info(p, status);
 					mark_process_state(p, ST_COMPLETED);
+				}
 				else if (WIFSTOPPED(status))
 					mark_process_state(p, ST_STOPPED);
 				return (true);
@@ -45,7 +59,19 @@ static bool	mark_state_by_pid(pid_t pid, int status)
 }
 
 /*
+** 1. Mark the status of each process, setting the state after.
 **
+** 2. Two conditions are defined to set the state:
+**
+** .. 2.1. If pid > 0, then a child process has had its status reported, and its
+** ..      process ID pid is returned. The process is then marked using it.
+**
+** .. 2.2. If pid = 0, or pid = -1 with the errno equals to ECHILD, then it that
+** ..      there are no child processes to wait for and waitpid(2) exited. But,
+** ..      if the job has been lauched, and is currently in running state, then
+** ..      it means that the job has exited, so it is marked as completed after.
+**
+** @return Boolean.
 */
 
 static bool	mark_process_status(pid_t pid, int status)
@@ -53,7 +79,7 @@ static bool	mark_process_status(pid_t pid, int status)
 	t_job	*j;
 
 	if (pid > 0)
-		return (mark_state_by_pid(pid, status));
+		return (mark_process_state_by_pid(pid, status));
 	else if (pid == 0 || (pid == -1 && errno == ECHILD))
 	{
 		j = g_first_job;
@@ -95,13 +121,13 @@ void		check_for_status(void)
 /*
 ** 1. Check if child processes wish to report status. Execution of the program
 **    IS SUSPENDED if a child process is running and does not report status.
-**    Program will resume only when all the processes associated with job J
-**    are terminated or signaled.
+**    Program will resume only when all the processes associated with job J are
+**    terminated or signaled.
 **
 ** 2. Wait (blocking mode) for a child process to report status. If the
-**    WUNTRACED option is set, children of the current process that are
-**    stopped due to a SIGTTIN, SIGTTOU, SIGTSTP, or SIGSTOP signal also
-**    have their status reported.
+**    WUNTRACED option is set, children of the current process that are stopped
+**    due to a SIGTTIN, SIGTTOU, SIGTSTP, or SIGSTOP signal also have their
+**    status reported.
 **
 ** 3. If status has been marked, wait for another child process by calling
 **    waitpid(2) again. If status has not been marked, exit the loop.

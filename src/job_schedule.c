@@ -6,15 +6,15 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 18:28:57 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/29 03:14:26 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/31 05:58:21 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
 
 /*
-** 1. Put a process in foreground using tcsetpgrp(3) by giving terminal
-**    access to the process group for receiving signals and stdin.
+** 1. Put a process in foreground using tcsetpgrp(3) by giving terminal access
+**    to the process group for receiving signals and stdin.
 **
 ** 2. Wait and block program for the processes to finish or report status.
 **

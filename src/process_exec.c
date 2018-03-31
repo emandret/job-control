@@ -6,18 +6,18 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:43:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/30 05:26:06 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/31 06:01:26 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
 
 /*
-** Set the process group ID pgid to the process corresponding to the
-** process ID pid. If the process group ID pgid is zero, then the
-** process group ID pgid is set to the process ID pid value.
+** Set the process group ID pgid to the process corresponding to the process ID
+** pid. If the process group ID pgid is zero, then the process group ID pgid is
+** set to the process ID pid value.
 **
-** @return  	The process group ID pgid or -1 in case of error.
+** @return The process group ID pgid or -1 in case of error.
 */
 
 static pid_t	set_process_pgid(pid_t pid, pid_t pgid)
@@ -105,16 +105,15 @@ static void		launch_process(t_process *p, t_job *j, bool foreground)
 }
 
 /*
-** 1. Launch all the pipelined processes associated with a job. Handle the
-**    pipes to map file descriptors from the first to the last process.
+** 1. Launch all the pipelined processes associated with a job. Handle the pipes
+**    to map file descriptors from the first to the last process.
 **
-** 2. Use pipe(2) to allocate two fildes for inter-process communication.
-**    If a next process exists, stdout of process P is equal to write-end
-**    fildes of the created pipe. Otherwise, process stdout is equal to
-**    the job stdout.
+** 2. Use pipe(2) to allocate two fildes for inter-process communication. If a
+**    next process exists, stdout of process P is equal to write-end fildes of
+**    the created pipe. Otherwise, process stdout is equal to the job stdout.
 **
-** 3. Call launch_process(), duplicating current running program and
-**    executing the requested process.
+** 3. Call launch_process(), duplicating current running program and executing
+**    the requested process.
 **
 ** 4. Clean the pipe ends by closing the unused ones since they are duplicated
 **    in the launched process. If the fildes value is equal to the job fildes

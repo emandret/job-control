@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:10:00 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/29 04:57:41 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/31 02:17:59 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ typedef struct			s_std
 typedef struct			s_process
 {
 	struct s_process	*next;
-	char				*xpath;
-	char				**argv;
+	const char			*xpath;
+	char *const			*argv;
 	pid_t				pid;
 	bool				completed;
 	bool				stopped;
@@ -82,6 +82,7 @@ typedef struct			s_process
 ** A job is a pipeline of processes:
 **
 ** @next                The next job in the list.
+** @name                The name.
 ** @first_process       The head of the process list.
 ** @id                  The identifier.
 ** @pgid                The process group ID pgid of the job.
@@ -92,6 +93,7 @@ typedef struct			s_process
 typedef struct			s_job
 {
 	struct s_job		*next;
+	const char			*name;
 	t_process			*first_process;
 	unsigned int		id;
 	pid_t				pgid;
@@ -120,7 +122,7 @@ typedef struct			s_shell
 /*
 ** The declaration for the environment global variable
 */
-extern char				**g_envp;
+extern char *const		*g_envp;
 
 /*
 ** The active jobs are linked into a list. This is its head.
