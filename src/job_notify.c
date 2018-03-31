@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 18:37:29 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/31 05:58:46 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/31 06:25:06 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	do_job_notification(void)
 				format_job_info(j, "completed");
 			else if (check_job_state(j, ST_STOPPED))
 				format_job_info(j, "stopped");
+			j->notified = true;
 		}
 		j = j->next;
 	}

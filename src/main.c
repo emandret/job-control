@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/26 22:48:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/31 05:59:42 by emandret         ###   ########.fr       */
+/*   Updated: 2018/03/31 06:21:01 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,19 @@ static void		print_job(t_job *j)
 
 int				main(void)
 {
+	t_job			*i;
 	t_job			*j;
 
 	init_shell();
+	i = create_job("ls -Rl", 0, 1, 2);
 	j = create_job("cat -e", 0, 1, 2);
+	add_process(i, "/bin/ls", (char *const []){"ls", "-Rl", "/", NULL});
 	add_process(j, "/bin/cat", (char *const []){"cat", "-e", NULL});
+	launch_job(i, true);
+	do_job_notification();
 	launch_job(j, true);
 	do_job_notification();
+	print_job(i);
 	print_job(j);
 	return (0);
 }
