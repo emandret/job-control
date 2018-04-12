@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 07:41:24 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/31 06:14:56 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/12 15:06:49 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	init_shell(void)
 		signal(SIGTSTP, SIG_IGN);
 		signal(SIGTTIN, SIG_IGN);
 		signal(SIGTTOU, SIG_IGN);
-		signal(SIGCHLD, SIG_IGN);
+		signal(SIGCHLD, SIG_DFL);
 		g_shell.pgid = getpid();
 		if (setpgid(g_shell.pgid, g_shell.pgid) == -1)
 		{
