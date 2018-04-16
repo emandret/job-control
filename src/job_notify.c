@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 18:37:29 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/31 06:25:06 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/16 23:31:57 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 void	format_job_info(t_job *j, const char *status)
 {
-	fprintf(stderr, "[%d] PGID %jd (%s): %s\n", j->id, (intmax_t)j->pgid,
-			status, j->name);
+	fprintf(stderr, "[%d] %jd (%s): %s\n", j->id, (intmax_t)j->pgid, j->name,
+			status);
 }
 
 /*

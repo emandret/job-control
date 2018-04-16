@@ -6,91 +6,64 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:02:33 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/31 06:14:06 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/16 23:29:50 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
 
 /*
-** Print formatted info about processes terminated by a signal.
+** Set the state of each process corresponding to the status.
 */
 
-static void	format_termsig_info(t_process *p, int status)
+static void	mark_process_state_by_status(t_process *p, int status)
 {
-	fprintf(stderr, "PID %jd (terminated by signal %d): %s\n", (intmax_t)p->pid,
-			WTERMSIG(status), p->xpath);
+	if (WIFSTOPPED(status))
+		mark_process_state(p, ST_STOPPED);
+	else if (WIFEXITED(status))
+		mark_process_state(p, ST_COMPLETED);
+	else if (WIFSIGNALED(status))
+	{
+		mark_process_state(p, ST_COMPLETED);
+		fprintf(stderr, "%jd killed    %s", (intmax_t)p->pid, p->xpath);
+	}
 }
 
 /*
-** Set the state of each process by process ID pid. Handle notifying for
-** processes terminated by signals.
+** Mark the state of each process, according to the status info returned by
+** waitpid(2).
 **
-** @return Boolean.
+** @return 1 if the status has been marked, 0 if not marked, -1 if an error has
+** occurred.
 */
 
-static bool	mark_process_state_by_pid(pid_t pid, int status)
+static int	mark_process_status(pid_t pid, int status)
 {
 	t_job		*j;
 	t_process	*p;
 
-	j = g_first_job;
-	while (j)
-	{
-		p = j->first_process;
-		while (p)
-		{
-			if (p->pid == pid)
-			{
-				if (WIFSIGNALED(status))
-				{
-					format_termsig_info(p, status);
-					mark_process_state(p, ST_COMPLETED);
-				}
-				else if (WIFSTOPPED(status))
-					mark_process_state(p, ST_STOPPED);
-				return (true);
-			}
-			p = p->next;
-		}
-		j = j->next;
-	}
-	return (false);
-}
-
-/*
-** 1. Mark the status of each process, setting the state after.
-**
-** 2. Two conditions are defined to set the state:
-**
-** .. 2.1. If pid > 0, then a child process has had its status reported, and its
-** ..      process ID pid is returned. The process is then marked using it.
-**
-** .. 2.2. If pid = 0, or pid = -1 with the errno equals to ECHILD, then it that
-** ..      there are no child processes to wait for and waitpid(2) exited. But,
-** ..      if the job has been lauched, and is currently in running state, then
-** ..      it means that the job has exited, so it is marked as completed after.
-**
-** @return Boolean.
-*/
-
-static bool	mark_process_status(pid_t pid, int status)
-{
-	t_job	*j;
-
 	if (pid > 0)
-		return (mark_process_state_by_pid(pid, status));
-	else if (pid == 0 || (pid == -1 && errno == ECHILD))
 	{
 		j = g_first_job;
 		while (j)
 		{
-			if (j->launched && check_job_state(j, ST_RUNNING))
-				mark_job_state(j, ST_COMPLETED);
+			p = j->first_process;
+			while (p)
+			{
+				if (p->pid == pid)
+				{
+					mark_process_state_by_status(p, status);
+					return (1);
+				}
+				p = p->next;
+			}
 			j = j->next;
 		}
+		return (0);
 	}
-	return (false);
+	else if (pid == 0 || (pid == -1 && errno == ECHILD))
+		return (0);
+	return (-1);
 }
 
 /*
@@ -113,7 +86,7 @@ void		check_for_status(void)
 	while (1)
 	{
 		pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
-		if (!mark_process_status(pid, status))
+		if (mark_process_status(pid, status) <= 0)
 			break ;
 	}
 }
@@ -141,7 +114,7 @@ void		wait_for_job(t_job *j)
 	while (1)
 	{
 		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
-		if (!mark_process_status(pid, status) ||
+		if (mark_process_status(pid, status) <= 0 ||
 			!check_job_state(j, ST_RUNNING))
 			break ;
 	}

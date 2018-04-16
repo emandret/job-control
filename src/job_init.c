@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 17:49:22 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/31 05:19:14 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/16 23:20:15 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ unsigned int	get_job_list_size(void)
 	unsigned int	i;
 	t_job			*j;
 
-	i = 0;
+	i = 1;
 	j = g_first_job;
 	while (j)
 	{
