@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:10:00 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/31 02:17:59 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/17 00:22:03 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@
 
 # define READ_END 0
 # define WRITE_END 1
+
+/*
+** Represent a builtin type
+*/
+typedef	void			(*t_builtin)(char *const *argv);
 
 /*
 ** The three main state for a process.
