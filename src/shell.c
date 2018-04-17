@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 07:41:24 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/12 15:06:49 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/18 03:13:16 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,7 @@ void	init_shell(void)
 	{
 		while (tcgetpgrp(g_shell.terminal_fd) != (g_shell.pgid = getpgrp()))
 			kill(-g_shell.pgid, SIGTTIN);
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
-		signal(SIGTSTP, SIG_IGN);
-		signal(SIGTTIN, SIG_IGN);
-		signal(SIGTTOU, SIG_IGN);
-		signal(SIGCHLD, SIG_DFL);
+		switch_signal_handlers();
 		g_shell.pgid = getpid();
 		if (setpgid(g_shell.pgid, g_shell.pgid) == -1)
 		{
@@ -51,5 +46,29 @@ void	init_shell(void)
 		}
 		tcsetpgrp(g_shell.terminal_fd, g_shell.pgid);
 		tcgetattr(g_shell.terminal_fd, &g_shell.tmodes);
+	}
+}
+
+void	switch_signal_handlers(void)
+{
+	static bool	on;
+
+	if (!on)
+	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGTSTP, SIG_IGN);
+		signal(SIGTTIN, SIG_IGN);
+		signal(SIGTTOU, SIG_IGN);
+		on = true;
+	}
+	else
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGTSTP, SIG_DFL);
+		signal(SIGTTIN, SIG_DFL);
+		signal(SIGTTOU, SIG_DFL);
+		on = false;
 	}
 }

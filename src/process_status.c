@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:02:33 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/16 23:29:50 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/18 03:39:12 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	mark_process_state_by_status(t_process *p, int status)
 	else if (WIFSIGNALED(status))
 	{
 		mark_process_state(p, ST_COMPLETED);
-		fprintf(stderr, "%jd killed    %s", (intmax_t)p->pid, p->xpath);
+		fprintf(stderr, "%jd killed    %s", (intmax_t)p->pid, p->argv[0]);
 	}
 }
 
@@ -50,7 +50,7 @@ static int	mark_process_status(pid_t pid, int status)
 			p = j->first_process;
 			while (p)
 			{
-				if (p->pid == pid)
+				if (p->pid == pid && p->xpath && !p->builtin)
 				{
 					mark_process_state_by_status(p, status);
 					return (1);
@@ -111,6 +111,8 @@ void		wait_for_job(t_job *j)
 	int		status;
 	pid_t	pid;
 
+	if (j->first_process->builtin && !j->first_process->next)
+		return ;
 	while (1)
 	{
 		pid = waitpid(WAIT_ANY, &status, WUNTRACED);

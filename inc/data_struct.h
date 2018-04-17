@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:10:00 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/17 00:22:03 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/18 02:18:23 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@
 # define WRITE_END 1
 
 /*
-** Represent a builtin type
+** Represent a built-in type
 */
-typedef	void			(*t_builtin)(char *const *argv);
+typedef void			(*t_builtin)(char *const *argv);
 
 /*
 ** The three main state for a process.
@@ -51,12 +51,20 @@ typedef enum			e_state
 ** @in                  The stdin.
 ** @out                 The stdout.
 ** @err                 The stderr.
+** @fd3                 The additional file descriptors according to POSIX.
 */
 typedef struct			s_std
 {
 	int					in;
 	int					out;
 	int					err;
+	int					fd3;
+	int					fd4;
+	int					fd5;
+	int					fd6;
+	int					fd7;
+	int					fd8;
+	int					fd9;
 }						t_std;
 
 /*
@@ -64,6 +72,7 @@ typedef struct			s_std
 **
 ** @next                The next process in the list.
 ** @xpath               The executable path.
+** @builtin             The built-in function pointer.
 ** @argv                The arguments.
 ** @pid                 The process ID pid of the process.
 ** @completed           True if the process has completed.
@@ -75,6 +84,7 @@ typedef struct			s_process
 {
 	struct s_process	*next;
 	const char			*xpath;
+	t_builtin			builtin;
 	char *const			*argv;
 	pid_t				pid;
 	bool				completed;

@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:21:15 by emandret          #+#    #+#             */
-/*   Updated: 2018/03/31 02:48:31 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/18 02:45:07 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,16 @@
 # include "data_struct.h"
 
 /*
-** Assert that mallocs are protected.
-*/
-# define ASSERT_MALLOC(x) if (!(x)) return (NULL);
-
-/*
 ** shell.c
 */
 void			init_shell(void);
+void			switch_signal_handlers(void);
 
 /*
 ** job_init.c
 */
 unsigned int	get_job_list_size(void);
-t_job			*create_job(const char *name, int stdin, int stdout,
-							int stderr);
+t_job			*create_job(const char *name);
 void			free_job(t_job *j);
 
 /*
@@ -62,13 +57,17 @@ void			continue_job(t_job *j, bool foreground);
 /*
 ** process_util.c
 */
+pid_t			set_process_pgid(pid_t pid, pid_t pgid);
+void			set_channel(int fildes, int fildes2);
+void			close_channel(int fildes, int fildes2);
 bool			check_process_state(t_process *p, t_state st);
 void			mark_process_state(t_process *p, t_state st);
 
 /*
 ** process_init.c
 */
-t_process		*add_process(t_job *j, const char *xpath, char *const *argv);
+t_process		*add_process(t_job *j, const char *xpath, t_builtin builtin,
+				char *const *argv);
 
 /*
 ** process_status.c
@@ -80,5 +79,10 @@ void			wait_for_job(t_job *j);
 ** process_exec.c
 */
 void			launch_job_processes(t_job *j, bool foreground);
+
+/*
+** builtin_ex.c
+*/
+void			builtin_ex(char *const *argv);
 
 #endif
