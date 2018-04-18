@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:02:33 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 08:07:15 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/18 19:36:22 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,8 @@ void		wait_for_job(t_job *j)
 	{
 		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
 		if (mark_process_status(pid, status) <= 0 ||
-			!check_job_state(j, ST_RUNNING))
+			check_job_state(j, ST_COMPLETED) ||
+			check_job_state(j, ST_STOPPED))
 			break ;
 	}
 }
