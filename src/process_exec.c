@@ -6,27 +6,11 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:43:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 05:07:57 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/18 08:25:02 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
-
-/*
-** Call if the process is a builtin.
-**
-** @return Boolean.
-*/
-
-static bool		call_if_builtin(t_process *p)
-{
-	if (!p->xpath && p->builtin)
-	{
-		(p->builtin)(p->argv);
-		return (true);
-	}
-	return (false);
-}
 
 /*
 ** Set all process channels
@@ -44,6 +28,25 @@ static void		set_all_channels(t_process *p)
 	set_channel(p->std.fd7, 7);
 	set_channel(p->std.fd8, 8);
 	set_channel(p->std.fd9, 9);
+}
+
+/*
+** Call if the process is a builtin.
+**
+** @return Boolean.
+*/
+
+static bool		call_if_builtin(t_process *p)
+{
+	if (!p->xpath && p->builtin)
+	{
+		(p->builtin)(p->argv);
+		close_channel(p->std.in, STDIN_FILENO);
+		close_channel(p->std.out, STDOUT_FILENO);
+		close_channel(p->std.err, STDERR_FILENO);
+		return (true);
+	}
+	return (false);
 }
 
 /*
@@ -120,7 +123,6 @@ void			launch_job_processes(t_job *j, bool foreground)
 	int			pipefd[2];
 
 	p = j->first_process;
-	p->std.in = j->std.in;
 	while (p)
 	{
 		if (p->next)
@@ -129,12 +131,9 @@ void			launch_job_processes(t_job *j, bool foreground)
 				exit(EXIT_FAILURE);
 			p->std.out = pipefd[WRITE_END];
 		}
-		else
-			p->std.out = j->std.out;
-		p->std.err = j->std.err;
 		launch_process(p, j, foreground);
-		close_channel(p->std.in, j->std.in);
-		close_channel(p->std.out, j->std.out);
+		close_channel(p->std.in, p->std.in);
+		close_channel(p->std.out, p->std.out);
 		if ((p = p->next))
 			p->std.in = pipefd[READ_END];
 	}

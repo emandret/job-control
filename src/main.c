@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/26 22:48:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 03:41:38 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/18 08:24:35 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,6 @@ static void		print_job(t_job *j)
 	printf("job id        : %d\n", j->id);
 	printf("job pgid      : %d\n", j->pgid);
 	printf("notified      : %d\n", j->notified);
-	printf("stdin         : %d\n", j->std.in);
-	printf("stdout        : %d\n", j->std.out);
-	printf("stderr        : %d\n", j->std.err);
 	p = j->first_process;
 	i = 0;
 	while (p)
@@ -42,20 +39,20 @@ static void		print_job(t_job *j)
 int				main(void)
 {
 	t_job			*i;
-	t_job			*j;
+	// t_job			*j;
 
 	init_shell();
-	i = create_job("ls -Rl");
-	j = create_job("builtin example");
+	i = create_job("ls -Rl /");
+	// j = create_job("builtin example");
 	add_process(i, "/bin/ls", NULL, (char *const[]){"ls", "-Rl", "/", NULL});
-	// add_process(j, "/bin/cat", NULL, (char *const[]){"cat", "-e", NULL});
-	add_process(j, NULL, &builtin_ex, (char *const[]){"builtin", NULL});
+	// add_process(i, "/bin/cat", NULL, (char *const[]){"cat", "-e", NULL});
+	add_process(i, NULL, &builtin_ex, (char *const[]){"builtin", NULL});
 	launch_job(i, true);
 	do_job_notification();
-	launch_job(j, true);
-	do_job_notification();
+	// launch_job(j, true);
+	// do_job_notification();
 	print_job(i);
-	print_job(j);
-	sleep(5);
+	// print_job(j);
+	// sleep(10);
 	return (0);
 }

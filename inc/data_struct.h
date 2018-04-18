@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:10:00 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 02:18:23 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/18 08:22:39 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ typedef struct			s_process
 ** @pgid                The process group ID pgid of the job.
 ** @notified            True if the user has been notified for the job.
 ** @tmodes              The terminal attributes for a job.
-** @std                 The three standard file descriptors.
 */
 typedef struct			s_job
 {
@@ -115,7 +114,6 @@ typedef struct			s_job
 	bool				launched;
 	bool				notified;
 	struct termios		tmodes;
-	t_std				std;
 }						t_job;
 
 /*

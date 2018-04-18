@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:02:33 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 05:07:40 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/18 08:07:15 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** Set the state of each process corresponding to the status.
 */
 
-static void	mark_process_state_by_status(t_process *p, int status)
+static void	mark_process_state_by_status(t_job *j, t_process *p, int status)
 {
 	if (WIFSTOPPED(status))
 		mark_process_state(p, ST_STOPPED);
@@ -25,7 +25,8 @@ static void	mark_process_state_by_status(t_process *p, int status)
 	else if (WIFSIGNALED(status))
 	{
 		mark_process_state(p, ST_COMPLETED);
-		fprintf(stderr, "%jd killed    %s", (intmax_t)p->pid, p->argv[0]);
+		fprintf(stderr, "\n[%d]    %05jd killed       %s\n", j->id,
+				(intmax_t)p->pid, p->argv[0]);
 	}
 }
 
@@ -52,7 +53,7 @@ static int	mark_process_status(pid_t pid, int status)
 			{
 				if (p->pid == pid && p->xpath && !p->builtin)
 				{
-					mark_process_state_by_status(p, status);
+					mark_process_state_by_status(j, p, status);
 					return (1);
 				}
 				p = p->next;
@@ -111,8 +112,7 @@ void		wait_for_job(t_job *j)
 	int		status;
 	pid_t	pid;
 
-	if (!j->first_process->xpath && j->first_process->builtin &&
-		!j->first_process->next)
+	if (find_job_by_id(get_job_list_size()) == j)
 		return ;
 	while (1)
 	{
