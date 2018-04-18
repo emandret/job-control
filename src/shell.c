@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 07:41:24 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 03:13:16 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/18 05:03:50 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,10 @@ void	init_shell(void)
 		tcgetattr(g_shell.terminal_fd, &g_shell.tmodes);
 	}
 }
+
+/*
+** Switch the signal handlers ON/OFF.
+*/
 
 void	switch_signal_handlers(void)
 {

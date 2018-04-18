@@ -6,21 +6,21 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:43:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 03:31:29 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/18 05:07:57 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
 
 /*
-** Call if builtin.
+** Call if the process is a builtin.
 **
 ** @return Boolean.
 */
 
 static bool		call_if_builtin(t_process *p)
 {
-	if (p->builtin)
+	if (!p->xpath && p->builtin)
 	{
 		(p->builtin)(p->argv);
 		return (true);
@@ -47,8 +47,8 @@ static void		set_all_channels(t_process *p)
 }
 
 /*
-** 1. Duplicate our running program using fork(2). Exit in case of failure.
-**    Execute the process otherwise.
+** 1. Execute a built-in command or duplicate our running program using fork(2).
+**    Exit in case of failure. Execute the process otherwise.
 **
 ** 2. In the child process (pid = 0):
 **
@@ -74,7 +74,7 @@ static void		launch_process(t_process *p, t_job *j, bool foreground)
 {
 	if (!p->next && call_if_builtin(p))
 	{
-		p->completed = true;
+		mark_process_state(p, ST_COMPLETED);
 		return ;
 	}
 	if (!(p->pid = fork()))

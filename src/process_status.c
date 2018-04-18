@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:02:33 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 03:39:12 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/18 05:07:40 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,8 @@ void		wait_for_job(t_job *j)
 	int		status;
 	pid_t	pid;
 
-	if (j->first_process->builtin && !j->first_process->next)
+	if (!j->first_process->xpath && j->first_process->builtin &&
+		!j->first_process->next)
 		return ;
 	while (1)
 	{
