@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/29 04:07:01 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 02:03:34 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/19 23:57:28 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ bool	check_process_state(t_process *p, t_state st)
 	if (st == ST_RUNNING)
 		return (!p->stopped && !p->completed);
 	if (st == ST_STOPPED)
-		return (p->stopped && !p->completed);
+		return (p->stopped || p->completed);
 	if (st == ST_COMPLETED)
 		return (p->stopped && p->completed);
 	return (false);
