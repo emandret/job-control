@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 18:37:29 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 06:16:58 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/19 19:50:07 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,9 @@
 ** Print formatted info about job status.
 */
 
-void	format_job_info(t_job *j, const char *status)
+void	format_job_info(int id, pid_t pid, const char *status, const char *name)
 {
-	fprintf(stderr, "\n[%d]    %05jd %s    %s\n", j->id, (intmax_t)j->pgid,
-			status, j->name);
+	fprintf(stderr, "\n[%d] %05jd %-12s %s\n", id, (intmax_t)pid, status, name);
 }
 
 /*
@@ -40,9 +39,9 @@ void	do_job_notification(void)
 		if (!j->notified && !check_job_state(j, ST_RUNNING))
 		{
 			if (check_job_state(j, ST_COMPLETED))
-				format_job_info(j, "completed");
+				format_job_info(j->id, j->pgid, "completed", j->name);
 			else if (check_job_state(j, ST_STOPPED))
-				format_job_info(j, "suspended");
+				format_job_info(j->id, j->pgid, "completed", j->name);
 			j->notified = true;
 		}
 		j = j->next;

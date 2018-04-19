@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:02:33 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 19:36:22 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/19 19:50:45 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ static void	mark_process_state_by_status(t_job *j, t_process *p, int status)
 	else if (WIFSIGNALED(status))
 	{
 		mark_process_state(p, ST_COMPLETED);
-		fprintf(stderr, "\n[%d]    %05jd killed       %s\n", j->id,
-				(intmax_t)p->pid, p->argv[0]);
+		format_job_info(j->id, p->pid, "killed", p->argv[0]);
 	}
 }
 

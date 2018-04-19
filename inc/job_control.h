@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:21:15 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 02:45:07 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/19 19:49:41 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void			put_job_in_background(t_job *j, bool cont);
 /*
 ** job_notify.c
 */
-void			format_job_info(t_job *j, const char *status);
+void			format_job_info(int id, pid_t pid, const char *status,
+				const char *name);
 void			do_job_notification(void);
 
 /*
