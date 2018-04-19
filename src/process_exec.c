@@ -6,32 +6,14 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:43:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/19 22:55:19 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/20 00:53:59 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "job_control.h"
 
 /*
-** Set all process channels
-*/
-
-static void		set_all_channels(t_process *p)
-{
-	set_channel(p->std.in, STDIN_FILENO);
-	set_channel(p->std.out, STDOUT_FILENO);
-	set_channel(p->std.err, STDERR_FILENO);
-	set_channel(p->std.fd3, 3);
-	set_channel(p->std.fd4, 4);
-	set_channel(p->std.fd5, 5);
-	set_channel(p->std.fd6, 6);
-	set_channel(p->std.fd7, 7);
-	set_channel(p->std.fd8, 8);
-	set_channel(p->std.fd9, 9);
-}
-
-/*
-** Call if the process is a built-in.
+** Call the process if it is a built-in one.
 **
 ** @return Boolean.
 */
@@ -47,6 +29,24 @@ static bool		call_if_builtin(t_process *p)
 		return (true);
 	}
 	return (false);
+}
+
+/*
+** Set all the process channels.
+*/
+
+static void		set_all_channels(t_process *p)
+{
+	set_channel(p->std.in, STDIN_FILENO);
+	set_channel(p->std.out, STDOUT_FILENO);
+	set_channel(p->std.err, STDERR_FILENO);
+	set_channel(p->std.fd3, 3);
+	set_channel(p->std.fd4, 4);
+	set_channel(p->std.fd5, 5);
+	set_channel(p->std.fd6, 6);
+	set_channel(p->std.fd7, 7);
+	set_channel(p->std.fd8, 8);
+	set_channel(p->std.fd9, 9);
 }
 
 /*
@@ -102,16 +102,6 @@ static void		launch_process(t_process *p, t_job *j, bool foreground)
 }
 
 /*
-** True if forkable. Specially made for built-in.
-**
-** @return Boolean.
-*/
-bool			is_forkable(t_process *p)
-{
-	return (!(p && p->builtin && !p->next));
-}
-
-/*
 ** 1. Launch all the pipelined processes associated with a job. Handle the pipes
 **    to map file descriptors from the first to the last process.
 **
@@ -142,8 +132,8 @@ void			launch_job_processes(t_job *j, bool foreground)
 			p->std.out = pipefd[WRITE_END];
 		}
 		launch_process(p, j, foreground);
-		close_channel(p->std.in, p->std.in);
-		close_channel(p->std.out, p->std.out);
+		close_channel(p->std.in, j->first_process->std.in);
+		close_channel(p->std.out, get_last_process(j)->std.out);
 		if ((p = p->next))
 			p->std.in = pipefd[READ_END];
 	}

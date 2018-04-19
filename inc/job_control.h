@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:21:15 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/19 22:45:53 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/20 00:45:15 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,12 @@ bool			check_process_state(t_process *p, t_state st);
 void			mark_process_state(t_process *p, t_state st);
 
 /*
+** process_util2.c
+*/
+bool			is_forkable(t_process *p);
+t_process		*get_last_process(t_job *j);
+
+/*
 ** process_init.c
 */
 t_process		*add_process(t_job *j, const char *xpath, t_builtin builtin,
@@ -79,7 +85,6 @@ void			wait_for_job(t_job *j);
 /*
 ** process_exec.c
 */
-bool			is_forkable(t_process *p);
 void			launch_job_processes(t_job *j, bool foreground);
 
 /*
