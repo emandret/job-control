@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:43:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 08:25:02 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/19 22:55:19 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,16 @@ static void		set_all_channels(t_process *p)
 }
 
 /*
-** Call if the process is a builtin.
+** Call if the process is a built-in.
 **
 ** @return Boolean.
 */
 
 static bool		call_if_builtin(t_process *p)
 {
-	if (!p->xpath && p->builtin)
+	if (p->builtin)
 	{
-		(p->builtin)(p->argv);
+		p->builtin(p->argv);
 		close_channel(p->std.in, STDIN_FILENO);
 		close_channel(p->std.out, STDOUT_FILENO);
 		close_channel(p->std.err, STDERR_FILENO);
@@ -80,7 +80,7 @@ static void		launch_process(t_process *p, t_job *j, bool foreground)
 		mark_process_state(p, ST_COMPLETED);
 		return ;
 	}
-	if (!(p->pid = fork()))
+	else if (!(p->pid = fork()))
 	{
 		if (g_shell.is_interactive)
 		{
@@ -99,6 +99,16 @@ static void		launch_process(t_process *p, t_job *j, bool foreground)
 		j->pgid = set_process_pgid(p->pid, j->pgid);
 	if (p->pid == -1 || j->pgid == -1)
 		exit(EXIT_FAILURE);
+}
+
+/*
+** True if forkable. Specially made for built-in.
+**
+** @return Boolean.
+*/
+bool			is_forkable(t_process *p)
+{
+	return (!(p && p->builtin && !p->next));
 }
 
 /*

@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:02:33 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/19 21:09:00 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/19 22:46:44 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,22 @@
 ** Set the state of each process corresponding to the status.
 */
 
-static void	mark_process_state_by_status(t_job *j, t_process *p, int status)
+static int	mark_process_by_pid(t_process *p, int status)
 {
 	if (WIFSTOPPED(status))
-		mark_process_state(p, ST_STOPPED);
-	else if (WIFEXITED(status))
-		mark_process_state(p, ST_COMPLETED);
-	else if (WIFSIGNALED(status))
 	{
-		mark_process_state(p, ST_COMPLETED);
-		format_job_info(j->id, p->pid, "killed", p->argv[0]);
+		format_job_info(0, p->pid, "stopped", p->argv[0]);
+		mark_process_state(p, ST_STOPPED);
 	}
+	else
+	{
+		if (WIFSIGNALED(status))
+			format_job_info(0, p->pid, "killed", p->argv[0]);
+		mark_process_state(p, ST_COMPLETED);
+	}
+	if (!is_forkable(p->next))
+		return (0);
+	return (1);
 }
 
 /*
@@ -51,10 +56,7 @@ static int	mark_process_status(pid_t pid, int status)
 			while (p)
 			{
 				if (p->pid == pid)
-				{
-					mark_process_state_by_status(j, p, status);
-					return (1);
-				}
+					return (mark_process_by_pid(p, status));
 				p = p->next;
 			}
 			j = j->next;
@@ -111,7 +113,7 @@ void		wait_for_job(t_job *j)
 	int		status;
 	pid_t	pid;
 
-	if (find_job_by_id(get_job_list_size()) == j)
+	if (!is_forkable(j->first_process))
 		return ;
 	while (1)
 	{

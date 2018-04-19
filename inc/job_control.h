@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/23 02:21:15 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/19 19:49:41 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/19 22:45:53 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void			wait_for_job(t_job *j);
 /*
 ** process_exec.c
 */
+bool			is_forkable(t_process *p);
 void			launch_job_processes(t_job *j, bool foreground);
 
 /*

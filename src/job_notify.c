@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 18:37:29 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/19 19:50:07 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/19 21:42:12 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	do_job_notification(void)
 			if (check_job_state(j, ST_COMPLETED))
 				format_job_info(j->id, j->pgid, "completed", j->name);
 			else if (check_job_state(j, ST_STOPPED))
-				format_job_info(j->id, j->pgid, "completed", j->name);
+				format_job_info(j->id, j->pgid, "suspended", j->name);
 			j->notified = true;
 		}
 		j = j->next;

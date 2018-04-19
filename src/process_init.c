@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:40:19 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/18 05:53:41 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/19 23:24:25 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,7 @@ static t_process	*init_process(const char *xpath, t_builtin builtin,
 	if (!(p = malloc(sizeof(t_process))))
 		return (NULL);
 	p->next = NULL;
-	if (xpath)
-		p->xpath = strdup(xpath);
+	p->xpath = (xpath) ? strdup(xpath) : NULL;
 	p->builtin = builtin;
 	p->argv = init_argv(argv);
 	p->pid = 0;
