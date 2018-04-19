@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:02:33 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/19 19:50:45 by emandret         ###   ########.fr       */
+/*   Updated: 2018/04/19 21:09:00 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	mark_process_status(pid_t pid, int status)
 			p = j->first_process;
 			while (p)
 			{
-				if (p->pid == pid && p->xpath && !p->builtin)
+				if (p->pid == pid)
 				{
 					mark_process_state_by_status(j, p, status);
 					return (1);
