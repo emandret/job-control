@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:43:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/04/20 00:53:59 by emandret         ###   ########.fr       */
+/*   Updated: 2018/05/02 21:29:28 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static void		set_all_channels(t_process *p)
 **         ID pgid.
 */
 
-static void		launch_process(t_process *p, t_job *j, bool foreground)
+static void		launch_process(t_process *p, t_job *j, bool foreground, int pipefd[2])
 {
 	if (!p->next && call_if_builtin(p))
 	{
@@ -89,6 +89,10 @@ static void		launch_process(t_process *p, t_job *j, bool foreground)
 				tcsetpgrp(g_shell.terminal_fd, j->pgid);
 			switch_signal_handlers();
 		}
+		if (p->std.in != pipefd[READ_END])
+			close(pipefd[READ_END]);
+		if (p->std.out != pipefd[WRITE_END])
+			close(pipefd[WRITE_END]);
 		set_all_channels(p);
 		if (call_if_builtin(p))
 			exit(EXIT_SUCCESS);
@@ -130,11 +134,11 @@ void			launch_job_processes(t_job *j, bool foreground)
 			if (pipe(pipefd) == -1)
 				exit(EXIT_FAILURE);
 			p->std.out = pipefd[WRITE_END];
+			p->next->std.in = pipefd[READ_END];
 		}
-		launch_process(p, j, foreground);
+		launch_process(p, j, foreground, pipefd);
 		close_channel(p->std.in, j->first_process->std.in);
 		close_channel(p->std.out, get_last_process(j)->std.out);
-		if ((p = p->next))
-			p->std.in = pipefd[READ_END];
+		p = p->next;
 	}
 }

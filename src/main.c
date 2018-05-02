@@ -6,7 +6,7 @@
 /*   By: emandret <emandret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/26 22:48:43 by emandret          #+#    #+#             */
-/*   Updated: 2018/05/01 21:25:15 by emandret         ###   ########.fr       */
+/*   Updated: 2018/05/02 21:29:08 by emandret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int				main(void)
 	init_shell();
 	i = create_job("builtin_ex | ls -Rl /");
 	// j = create_job("builtin example");
-	add_process(i, "/bin/ls", NULL, (char *const[]){"ls", "-R", "/", NULL});
-	add_process(i, NULL, &builtin_ex, (char *const[]){"builtin", NULL});
-	// add_process(i, "/bin/cat", NULL, (char *const[]){"cat", "-e", NULL});
+	add_process(i, "/bin/ls", NULL, (char *const[]){"ls", "-l", "/", NULL});
+	// add_process(i, NULL, &builtin_ex, (char *const[]){"builtin", NULL});
+	add_process(i, "/bin/cat", NULL, (char *const[]){"cat", "-e", NULL});
 	launch_job(i, true);
 	do_job_notification();
 	// launch_job(j, true);
